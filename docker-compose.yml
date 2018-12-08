@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+    rtorrent:
+        image: cappuc/rtorrent
+        tty: true
+        ports:
+            - 6881:6881
+            - 6881:6881/udp
+            - 50000:50000
+    flood:
+        image: cappuc/flood
+        ports:
+            - 80:3000
+        environment:
+            RTORRENT_SCGI_HOST: rtorrent
+            RTORRENT_SCGI_PORT: 16891
