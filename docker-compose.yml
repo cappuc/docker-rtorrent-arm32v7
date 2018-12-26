@@ -2,16 +2,25 @@ version: "3"
 
 services:
     rtorrent:
-        image: cappuc/rtorrent
+        image: rtorrent2
+        restart: always
         tty: true
         ports:
             - 6881:6881
             - 6881:6881/udp
             - 50000:50000
+        volumes:
+            - /mnt/usb:/home/rtorrent/rtorrent/download:Z
+            - /home/cappuc/.rtorrent-session:/home/rtorrent/rtorrent/.session:Z
     flood:
         image: cappuc/flood
+        depends_on:
+            - rtorrent
+        restart: always
         ports:
             - 80:3000
         environment:
             RTORRENT_SCGI_HOST: rtorrent
             RTORRENT_SCGI_PORT: 16891
+        volumes:
+            - /home/cappuc/.flood-data:/data:Z
